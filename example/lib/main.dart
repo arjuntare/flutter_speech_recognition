@@ -79,10 +79,12 @@ class _MyAppState extends State<MyApp> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   new Expanded(
-                      child: new Container(
-                          padding: const EdgeInsets.all(8.0),
-                          color: Colors.grey.shade200,
-                          child: new Text(transcription))),
+                    child: new Container(
+                      padding: const EdgeInsets.all(8.0),
+                      color: Colors.grey.shade200,
+                      child: new Text(transcription),
+                    ),
+                  ),
                   _buildButton(
                     onPressed: _speechRecognitionAvailable && !_isListening
                         ? () => start()
