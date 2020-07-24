@@ -96,10 +96,13 @@
     recognitionTask = [speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable speechResult, NSError * _Nullable error) {
         BOOL isFinal = FALSE;
 
+
         if(speechResult) {
             [self->channel invokeMethod:@"speech.onSpeech" arguments:[speechResult.bestTranscription formattedString]];
             isFinal = speechResult.isFinal;
             //NSLog(@"partial: %@", [speechResult.bestTranscription formattedString]);
+
+            /*
             if(self->speechTimer) {
                 [self->speechTimer invalidate];
             }
@@ -109,7 +112,9 @@
                     [self->channel invokeMethod:@"speech.onRecognitionComplete" arguments:[speechResult.bestTranscription formattedString]];
                 }];
             }
+            */
         }
+
 
         if(isFinal) {
             [self->channel invokeMethod:@"speech.onRecognitionComplete" arguments:[speechResult.bestTranscription formattedString]];

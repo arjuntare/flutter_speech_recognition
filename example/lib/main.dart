@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_speech/flutter_speech.dart';
+import 'package:mac_notifications/mac_notifications.dart';
 
 void main() {
   debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
@@ -53,7 +55,7 @@ class _MyAppState extends State<MyApp> {
     _speech.setRecognitionResultHandler(onRecognitionResult);
     _speech.setRecognitionCompleteHandler(onRecognitionComplete);
     _speech.setErrorHandler(errorHandler);
-    _speech.activate('fr_FR').then((res) {
+    _speech.activate('en_US').then((res) {
       setState(() => _speechRecognitionAvailable = res);
     });
   }
@@ -167,8 +169,32 @@ class _MyAppState extends State<MyApp> {
 
   void onRecognitionComplete(String text) {
     print('_MyAppState.onRecognitionComplete... $text');
-    setState(() => _isListening = false);
+
+    _showNotification(text);
+
+    start();
+    //setState(() => _isListening = false);
   }
 
   void errorHandler() => activateSpeechRecognizer();
+
+  void _showNotification(String text) {
+    try {
+      MacNotifications.showNotification(
+        MacNotificationOptions(
+            identifier:
+            'test-notifications${DateTime.now().millisecondsSinceEpoch}',
+            title: 'Hello',
+            subtitle: 'You said',
+            informative:
+            '$text',
+//            schedule: true,
+//            scheduleTimeSeconds: 3,
+//            hasReplyButton: reply,
+//            replyPlaceholder: 'Tell me about your day.'),
+      ),);
+    } on PlatformException {
+      print('exception');
+    }
+  }
 }
